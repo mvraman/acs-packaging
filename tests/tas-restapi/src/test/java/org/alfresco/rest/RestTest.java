@@ -66,9 +66,29 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     @BeforeSuite(alwaysRun = true)
     public void checkServerHealth() throws Exception
     {
-        super.springTestContextPrepareTestInstance();
-        serverHealth.assertServerIsOnline();
+    	try {
+    		checkServer();
+    	} catch (Exception e) {
+    		LOG.error("*** checkServerHealth attempt 1 error: " + e.getMessage());
+    		
+    		try {
+    			Thread.sleep(10000);
+    		} catch (Exception e2) {
+    			// do nothing
+    		}
+    		
+    		try {
+    			checkServer();
+			} catch (Exception e3) {
+				LOG.error("*** checkServerHealth attempt 2 error: " + e.getMessage());
+			}
+    	}
         testSite = dataSite.createPublicRandomSite();
+    }
+    
+    private void checkServer() throws Exception {
+		super.springTestContextPrepareTestInstance();
+		serverHealth.assertServerIsOnline();
     }
     
     @BeforeMethod(alwaysRun=true)
