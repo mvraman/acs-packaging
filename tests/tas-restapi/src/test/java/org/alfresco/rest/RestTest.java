@@ -58,7 +58,7 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     @Autowired
     protected DataLink dataLink;
     
-    //@Autowired
+    @Autowired
     protected WorkflowService workflow;
 
     protected SiteModel testSite;
@@ -66,9 +66,8 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     @BeforeSuite(alwaysRun = true)
     public void checkServerHealth() throws Exception
     {
-		super.springTestContextPrepareTestInstance();
+		//super.springTestContextPrepareTestInstance();
 		serverHealth.assertServerIsOnline();
-		workflow = applicationContext.getBean(WorkflowService.class);
         testSite = dataSite.createPublicRandomSite();
     }
     
