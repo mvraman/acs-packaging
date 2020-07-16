@@ -58,11 +58,21 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     @Autowired
     protected DataLink dataLink;
     
-    @Autowired
+    //@Autowired
     protected WorkflowService workflow;
 
     protected SiteModel testSite;
 
+    @BeforeSuite(alwaysRun = true)
+    public void checkServerHealth() throws Exception
+    {
+		super.springTestContextPrepareTestInstance();
+		serverHealth.assertServerIsOnline();
+		workflow = applicationContext.getBean(WorkflowService.class);
+        testSite = dataSite.createPublicRandomSite();
+    }
+    
+    /*
     @BeforeSuite(alwaysRun = true)
     public void checkServerHealth() throws Exception
     {
@@ -81,6 +91,7 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     			checkServer();
 			} catch (Exception e3) {
 				LOG.error("*** checkServerHealth attempt 2 error: " + e.getMessage());
+				throw e3;
 			}
     	}
         testSite = dataSite.createPublicRandomSite();
@@ -89,7 +100,9 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     private void checkServer() throws Exception {
 		super.springTestContextPrepareTestInstance();
 		serverHealth.assertServerIsOnline();
+		workflow = applicationContext.getBean(WorkflowService.class);
     }
+    */
     
     @BeforeMethod(alwaysRun=true)
     public void showStartTestInfo(Method method)
