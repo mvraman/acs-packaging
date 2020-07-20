@@ -147,6 +147,7 @@ jobs:
         - export HOST_IP=$(echo ${HOST_IP%/*})
         - ./tests/scripts/start-compose.sh ./tests/environment/docker-compose-aims.yml
         - ./tests/scripts/wait-for-alfresco-start.sh "http://localhost:8082/alfresco"
+        - sleep 5m
       script:
         - travis_wait 40 mvn install -f tests/tas-restapi/pom.xml -Pall-tas-tests,run-restapi-aims -Denvironment=aims-environment -DrunBugs=false "-Didentity-service.auth-server-url=http://${HOST_IP}:8999/auth"
     - name: "CMIS TAS tests with AIMS"

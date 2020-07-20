@@ -3,7 +3,6 @@ package org.alfresco.rest;
 import java.lang.reflect.Method;
 
 import org.alfresco.dataprep.WorkflowService;
-import org.alfresco.dataprep.WorkflowService.WorkflowType;
 import org.alfresco.rest.core.RestProperties;
 import org.alfresco.rest.core.RestWrapper;
 import org.alfresco.utility.LogFactory;
@@ -14,7 +13,6 @@ import org.alfresco.utility.data.DataLink;
 import org.alfresco.utility.data.DataSite;
 import org.alfresco.utility.data.DataUserAIS;
 import org.alfresco.utility.data.DataWorkflow;
-import org.alfresco.utility.exception.ServerReachableAlfrescoIsNotRunningException;
 import org.alfresco.utility.model.SiteModel;
 import org.alfresco.utility.network.ServerHealth;
 import org.slf4j.Logger;
@@ -69,28 +67,8 @@ public abstract class RestTest extends AbstractTestNGSpringContextTests
     @BeforeSuite(alwaysRun = true)
     public void checkServerHealth() throws Exception
     {
-    	try {
-    		super.springTestContextPrepareTestInstance();
-    	} catch (Exception e) {
-    		LOG.error("*** springTestContextPrepareTestInstance error: " + e.getMessage(), e);
-    	}
-    	
-    	try {
-    		serverHealth.assertServerIsOnline();
-    	} catch (ServerReachableAlfrescoIsNotRunningException e) {
-    		Thread.sleep(15000);
-    		serverHealth.assertServerIsOnline();
-    	}
-		
-		if (WorkflowType.NewTask.getId() == null) {
-			if (workflow != null) {
-				workflow.afterPropertiesSet();
-			} else {
-				// not likely to happen
-				LOG.error("*** workflowService IS NULL");
-			}
-		}
-    	
+   		super.springTestContextPrepareTestInstance();
+   		serverHealth.assertServerIsOnline();
         testSite = dataSite.createPublicRandomSite();
     }
     
